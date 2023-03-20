@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://servicos.gpanet.com.br/gpa/federacao/servicoIdentidadeEBM/V1_0/" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ebo="http://servicos.gpanet.com.br/gpa/federacao/servicoIdentidadeEBO/V1_0/">
+  <import namespace="http://servicos.gpanet.com.br/gpa/federacao/servicoIdentidadeEBO/V1_0/" schemaLocation="servicoIdentidade_SOAP_1.xsd"/>
+  <element name="autenticarUsuario" type="ebo:AutenticarUsuarioType"/>
+  <element name="autenticarUsuarioResponse" type="ebo:AutenticarUsuarioResponseType"/>
+  <element name="obterGruposDeUsuario" type="ebo:ObterGruposDeUsuarioType"/>
+  <element name="obterGruposDeUsuarioResponse" type="ebo:ObterGruposDeUsuarioResponseType"/>
+  <element name="obterUsuario" type="ebo:ObterUsuarioType"/>
+  <element name="obterUsuarioResponse" type="ebo:ObterUsuarioResponseType"/>
+  <element name="desbloquearUsuario" type="ebo:DesbloquearUsuarioType"/>
+  <element name="desbloquearUsuarioResponse" type="ebo:DesbloquearUsuarioResponseType"/>
+  <element name="resetarSenha" type="ebo:ResetarSenhaType"/>
+  <element name="resetarSenhaResponse" type="ebo:ResetarSenhaResponseType"/>
+  <element name="ConsultarUsuario" type="ebo:ConsultarUsuarioType"/>
+  <element name="ConsultarUsuarioResponse" type="ebo:ConsultarUsuarioResponseType"/>
+  <element name="ProvisionarUsuarioAutenticado" type="ebo:ProvisionarUsuarioAutenticadoType"/>
+  <element name="ProvisionarUsuarioAutenticadoResponse" type="ebo:ProvisionarUsuarioAutenticadoResponseType"/>
+  <element name="autenticarConsultarUsuario" type="ebo:AutenticarConsultarUsuarioRequestType"/>
+  <element name="autenticarConsultarUsuarioResponse" type="ebo:AutenticarConsultarUsuarioResponseType"/>
+</schema>

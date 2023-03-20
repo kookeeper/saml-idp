@@ -1,0 +1,129 @@
+.themeInfo {
+	-theme-id: "1pc19avrmu";
+	left: 1px
+}
+
+::placeholder { /* Firefox, Chrome, Opera */ 
+    color: gray; 
+} 
+
+body.globalThemed {
+	background-repeat: no-repeat;
+	background-position: center;        
+	filter: none;
+	overflow: hidden
+}
+
+.globalThemed .globalLoginBgOverlay {
+	display: block;
+	background-color: rgba(255, 255, 255, 0)
+}
+
+.globalThemed .globalLogin, .globalThemed .globalLogin a, .globalThemed .globalLogin a:link,
+	.globalThemed .globalLogin a:visited, .globalThemed .globalLogin a:hover,
+	.globalThemed .globalLogin a:focus, .globalThemed .globalLogin a:active,
+	.globalThemed .globalLogin a.text, .globalThemed .globalLogin a:link.text,
+	.globalThemed .globalLogin a:visited.text, .globalThemed .globalLogin a:hover.text,
+	.globalThemed .globalLogin a:focus.text, .globalThemed .globalLogin a:active.text,
+	.globalThemed .globalLogin .sapMBtnInner.sapMBtnDefault, .globalThemed .globalLogin .sapMBtnInner.sapMBtnTransparent,
+	.globalThemed .globalLogin .sapMBtnInner.sapMBtnTransparent>.sapMBtnIcon,
+	.globalThemed .globalLogin .sapMInputBaseInner {
+	color: gray;
+}
+
+.globalThemed .globalLogin .sapMBtnInner.sapMBtnEmphasized {
+	background-color: #f2a900;
+	border-color: #f2a900;
+	color: #fff
+}
+
+.globalThemed .globalLogin .sapMBtnInner.sapMBtnDefault {
+	-theme-color: "not-overridden"
+}
+
+.globalThemed .globalLogin .sapMBtn:hover>.sapMBtnTransparent.sapMBtnHoverable,
+	.globalThemed .globalLogin .sapMBtn:hover>.sapMBtnDefault {
+	-theme-color: "not-overridden"
+}
+
+.globalThemed .globalLogin :not (.sapMBtnDisabled )>.sapMBtnTransparent.sapMBtnActive,
+	.globalThemed .globalLogin :not (.sapMBtnDisabled ):hover>.sapMBtnTransparent.sapMBtnActive,
+	.globalThemed .globalLogin .sapMBar-CTX :not (.sapMBtnDisabled )>.sapMBtnInner.sapMBtnActive
+	{
+	-theme-color: "not-overridden"
+}
+
+.globalThemed .globalLogin :not (.sapMBtnDisabled )>.sapMBtnInner.sapMBtnEmphasized.sapMBtnActive
+	{
+	background-color: #e59a00;
+	border-color: #e59a00;
+	color: #fff
+}
+
+.globalThemed .globalLogin .sapMBtn:hover>.sapMBtnHoverable.sapMBtnEmphasized:not
+	(.sapMBtnActive ), .globalThemed .globalLogin .sapMBtn:focus>.sapMBtnHoverable.sapMBtnEmphasized:not
+	(.sapMBtnActive ){
+	background-color: #f1a302;
+	border-color: #f1a302;
+	color: #fff
+}
+
+.globalThemed .globalLogin .sapMInputBaseInner:-webkit-autofill,
+	.globalThemed .globalLogin .sapMInputBaseInner:-webkit-autofill:hover,
+	.globalThemed .globalLogin .sapMInputBaseInner:-webkit-autofill:focus,
+	.globalThemed .globalLogin .sapMInputBaseInner:-webkit-autofill:active
+	{
+	-webkit-box-shadow: 0 0 0 1000px #595959 inset
+}
+
+.globalThemed .globalLogin .sapMInputBaseInner::-webkit-input-placeholder
+	{
+	-theme-color: "not-overridden"
+}
+
+.globalThemed .globalLogin .sapMInputBaseInner:-ms-input-placeholder {
+	-theme-color: "not-overridden"
+}
+
+.globalThemed .globalLogin .sapMInputBaseInner::-moz-placeholder {
+	-theme-color: "not-overridden"
+}
+
+.globalThemed .globalLogin .sapMInputBasePlaceholder {
+	-theme-color: "not-overridden"
+}
+
+.globalThemed .globalLoginFormInputs .sapUiVltCell {
+	-theme-border-bottom-color: "not-overridden"
+}
+
+.globalThemed .globalLoginLogoURL {
+	background-image: none;
+	visibility: inherit
+}
+
+.globalThemed .globalLoginLogoImg {
+	display: inline;
+	min-height: 40px;
+	height: 180px;
+	margin-top: -100px;
+}
+
+.globalThemed .globalLoginLogoImgSysFallback {
+	width: 100%
+}
+
+.globalThemed .globalLoginFooter {
+	-theme-background-image: "not-overridden"
+}
+
+.globalThemed .globalLoginFooter, .globalThemed .globalLoginFooter a,
+	.globalThemed .globalLoginFooter a:link, .globalThemed .globalLoginFooter a:visited,
+	.globalThemed .globalLoginFooter a:hover, .globalThemed .globalLoginFooter a:focus,
+	.globalThemed .globalLoginFooter a:active {
+	color: rgba(255, 255, 255, 0.65)
+}
+
+html[data-sap-ui-browser^="cr"] .sapUiLocalBusyIndicator:focus {
+	outline: 2px solid -webkit-focus-ring-color
+}

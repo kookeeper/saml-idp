@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	version="2.1" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd">
+	
+	<jaxb:bindings schemaLocation="../resources/xsd/xmldsig-core-schema.xsd"
+		node="/xs:schema[@targetNamespace='http://www.w3.org/2000/09/xmldsig#']">
+		<jaxb:schemaBindings>
+			<jaxb:package name="br.com.gpa.saml.jaxb2.xmldsig" />
+		</jaxb:schemaBindings>
+	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="../resources/xsd/xenc-schema.xsd"
+		node="/xs:schema[@targetNamespace='http://www.w3.org/2001/04/xmlenc#']">
+		<jaxb:schemaBindings>
+			<jaxb:package name="br.com.gpa.saml.jaxb2.xenc" />
+		</jaxb:schemaBindings>
+	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="../resources/xsd/saml-schema-assertion-2.0.xsd"
+		node="/xs:schema[@targetNamespace='urn:oasis:names:tc:SAML:2.0:assertion']">
+		<jaxb:schemaBindings>
+			<jaxb:package name="br.com.gpa.saml.jaxb2.assertion" />
+		</jaxb:schemaBindings>
+	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="../resources/xsd/saml-schema-protocol-2.0.xsd"
+		node="/xs:schema[@targetNamespace='urn:oasis:names:tc:SAML:2.0:protocol']">
+		<jaxb:schemaBindings>
+			<jaxb:package name="br.com.gpa.saml.jaxb2.protocol" />
+		</jaxb:schemaBindings>
+	</jaxb:bindings>
+
+</jaxb:bindings>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions name="Funcionario" targetNamespace="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/" xmlns:WL5G3N2="http://schemas.xmlsoap.org/wsdl/soap/">
+  <WL5G3N0:types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:complexType name="MensagemRetorno">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="codigoRetorno" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="descricaoRetorno" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ListarFuncionarioPorCpfRequest">
+        <xsd:sequence>
+          <xsd:element minOccurs="1" name="numeroCpf" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Funcionario">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="matricula" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="nome" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="sexo" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="dataAdmissao" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="dataNascimento" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="numeroCpf" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="rg" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="rne" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="numeroPIS" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="centroCusto" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codEmpresa" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codEstabelecimento" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="nomeEmpresa" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="nomeEstabelecimento" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bandeira" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codCargo" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="descCargo" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codCentroResultado" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="descCentroResultado" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codFuncao" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="descFuncao" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="codFamiliaCargo" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="descFamiliaCargo" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="dataInicioAfastamento" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="dataFimAfastamento" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="gestorEmpresa" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="gestorMatricula" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="gestorNome" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="logradouro" nillable="true" type="tns:Logradouro"/>
+          <xsd:element minOccurs="0" name="telefoneResidencial" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="telefoneCelular" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="estabelecimento" nillable="true" type="tns:Estabelecimento"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ListaFuncionario">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="funcionario" nillable="true" type="tns:Funcionario"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ListarFuncionarioPorCpfResponse">
+        <xsd:sequence>
+          <xsd:element maxOccurs="1" minOccurs="0" name="mensagemRetorno" nillable="true" type="tns:MensagemRetorno"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="listaFuncionario" nillable="true" type="tns:ListaFuncionario"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ListarFuncionarioPorMatriculaRequest">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="codigoEmpresa" type="xsd:integer"/>
+          <xsd:element minOccurs="1" name="numeroMatricula" type="xsd:integer"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ListarFuncionarioPorMatriculaResponse">
+        <xsd:sequence>
+          <xsd:element maxOccurs="1" minOccurs="0" name="mensagemRetorno" nillable="true" type="tns:MensagemRetorno"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="listaFuncionario" nillable="true" type="tns:ListaFuncionario"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Logradouro">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="tipo" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="nome" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="numero" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="complemento" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="bairro" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="cidade" nillable="true" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="uf" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Estabelecimento">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="logradouro" nillable="true" type="tns:Logradouro"/>
+          <xsd:element minOccurs="0" name="telefone" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="listarFuncionarioPorCpfRequest" type="tns:ListarFuncionarioPorCpfRequest"/>
+      <xsd:element name="listarFuncionarioPorCpfResponse" type="tns:ListarFuncionarioPorCpfResponse"/>
+      <xsd:element name="listarFuncionarioPorMatriculaRequest" type="tns:ListarFuncionarioPorMatriculaRequest"/>
+      <xsd:element name="listarFuncionarioPorMatriculaResponse" type="tns:ListarFuncionarioPorMatriculaResponse"/>
+      <xsd:element name="ListarValeTransporteRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="numeroCpf" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ListarValeTransporteResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="1" name="valeTransporte">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="empresa" type="xsd:string"/>
+                  <xsd:element name="matricula" type="xsd:string"/>
+                  <xsd:element name="direcionamento" type="xsd:string"/>
+                  <xsd:element name="credito" type="xsd:string"/>
+                  <xsd:element name="numeroCartao" type="xsd:string"/>
+                  <xsd:element name="ferias" type="xsd:string"/>
+                  <xsd:element name="status" type="xsd:string"/>
+                  <xsd:element name="motivo" type="xsd:string"/>
+                  <xsd:element name="idMotivo" type="xsd:string"/>
+                  <xsd:element name="dataCredito" type="xsd:dateTime"/>
+                  <xsd:element name="modalidade" type="xsd:string"/>
+                  <xsd:element name="tratativa" type="xsd:string"/>
+                  <xsd:element name="operadora" type="xsd:string"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ListarAssistenciaMedicaRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="numeroCpf" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ListarAssistenciaMedicaResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="1" name="assistenciaMedica">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="empresa" type="xsd:string"/>
+                  <xsd:element name="matricula" type="xsd:string"/>
+                  <xsd:element name="tipo" type="xsd:string"/>
+                  <xsd:element name="nomeAssociado" type="xsd:string"/>
+                  <xsd:element name="parentesco" type="xsd:string"/>
+                  <xsd:element name="operadora" type="xsd:string"/>
+                  <xsd:element name="numeroCarteirinha" type="xsd:string"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="listarFuncionarioPorCpfRequestMessage">
+    <WL5G3N0:part element="WL5G3N1:listarFuncionarioPorCpfRequest" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="listarFuncionarioPorCpfResponseMessage">
+    <WL5G3N0:part element="WL5G3N1:listarFuncionarioPorCpfResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="listarFuncionarioPorMatriculaRequestMessage">
+    <WL5G3N0:part element="WL5G3N1:listarFuncionarioPorMatriculaRequest" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="listarFuncionarioPorMatriculaResponseMessage">
+    <WL5G3N0:part element="WL5G3N1:listarFuncionarioPorMatriculaResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="listarValeTransporteRequest">
+    <WL5G3N0:part element="WL5G3N1:ListarValeTransporteRequest" name="listarValeTransporteRequest"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="listarValeTransporteResponse">
+    <WL5G3N0:part element="WL5G3N1:ListarValeTransporteResponse" name="listarValeTransporteResponse"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="listarAssistenciaMedicaRequest">
+    <WL5G3N0:part element="WL5G3N1:ListarAssistenciaMedicaRequest" name="listarAssistenciaMedicaRequest"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="listarAssistenciaMedicaResponse">
+    <WL5G3N0:part element="WL5G3N1:ListarAssistenciaMedicaResponse" name="listarAssistenciaMedicaResponse"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="FuncionarioPortType">
+    <WL5G3N0:operation name="listarFuncionarioPorCpf">
+      <WL5G3N0:input message="WL5G3N1:listarFuncionarioPorCpfRequestMessage"/>
+      <WL5G3N0:output message="WL5G3N1:listarFuncionarioPorCpfResponseMessage"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="listarFuncionarioPorMatricula">
+      <WL5G3N0:input message="WL5G3N1:listarFuncionarioPorMatriculaRequestMessage"/>
+      <WL5G3N0:output message="WL5G3N1:listarFuncionarioPorMatriculaResponseMessage"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="listarValeTransporte">
+      <WL5G3N0:input message="WL5G3N1:listarValeTransporteRequest"/>
+      <WL5G3N0:output message="WL5G3N1:listarValeTransporteResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="listarAssistenciaMedica">
+      <WL5G3N0:input message="WL5G3N1:listarAssistenciaMedicaRequest"/>
+      <WL5G3N0:output message="WL5G3N1:listarAssistenciaMedicaResponse"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="FuncionarioBinding" type="WL5G3N1:FuncionarioPortType">
+    <WL5G3N2:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="listarFuncionarioPorCpf">
+      <WL5G3N2:operation soapAction="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/listarFuncionarioPorCpf"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="listarFuncionarioPorMatricula">
+      <WL5G3N2:operation soapAction="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/listarFuncionarioPorMatricula"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="listarValeTransporte">
+      <WL5G3N2:operation soapAction="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/listarValeTransporte"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="listarAssistenciaMedica">
+      <WL5G3N2:operation soapAction="http://servicos.gpanet.com.br/gpa/rhmais/funcionario/listarAssistenciaMedica"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="FuncionarioBindingQSService">
+    <WL5G3N0:port binding="WL5G3N1:FuncionarioBinding" name="FuncionarioBindingQSPort">
+      <WL5G3N2:address location="http://pasoaprd.cbd.root.gpa:80/gpanet/rhmais/ps/FuncionarioPS"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

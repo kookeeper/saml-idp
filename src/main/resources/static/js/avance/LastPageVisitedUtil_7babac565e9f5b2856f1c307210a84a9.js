@@ -1,0 +1,1 @@
+function LastPageVisitedUtil(){}LastPageVisitedUtil.ignoreLastPage=function(){var c=location.search,a=!1,b=window.pageHeaderJsonData;b&&b.utilityLinks&&(a=(a=b.utilityLinks.links)&&a.some(function(a){return"PROXY_BECOME_SELF"===a.id}));return-1!=c.indexOf("saveLastPageSaved\x3dfalse")||-1!=c.indexOf("bplte_logout\x3d1")||0==location.pathname.indexOf("/sf/logout")||a};
