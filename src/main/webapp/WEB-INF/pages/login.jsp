@@ -154,7 +154,7 @@ body {
 							<div class="sapUiVltCell sapuiVltCell"></div>
 							<div class="sapUiVltCell sapuiVltCell">
 								<form id="loginForm" data-sap-ui="loginForm"
-									class="bizLoginForm" method="POST" action="doSSO"
+									class="bizLoginForm" method="POST" pages="doSSO"
 									autocomplete="off">
 									<input type="hidden" name="bplte_userid" value=""> <input
 										type="hidden" name="company" value="gpabr">
@@ -243,13 +243,13 @@ body {
 										value="${samlRequest}" /> <input type="hidden" size="1024"
 										name="postRequest" value="${postRequest}" /> <input
 										type="hidden" size="1024" name="entityId" value="${entityId}" />
-									<input type="hidden" size="1024" name="requestID" value="${requestID}" />
-									<input type="hidden" size="1024" name="requestIssuer" value="${requestIssuer}" /> 
-										<input type="hidden" size="1024"
-										name="relayState" value="${relayState}" /> <input
-										type="hidden" size="1024" name="sigAlg" value="${sigAlg}" />
-									<input type="hidden" size="1024" name="signature"
-										value="${signature}" />
+									<input type="hidden" size="1024" name="requestID"
+										value="${requestID}" /> <input type="hidden" size="1024"
+										name="requestIssuer" value="${requestIssuer}" /> <input
+										type="hidden" size="1024" name="relayState"
+										value="${relayState}" /> <input type="hidden" size="1024"
+										name="sigAlg" value="${sigAlg}" /> <input type="hidden"
+										size="1024" name="signature" value="${signature}" />
 								</form>
 							</div>
 						</div>
