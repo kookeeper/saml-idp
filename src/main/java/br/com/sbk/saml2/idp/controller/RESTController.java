@@ -24,10 +24,8 @@ import br.com.sbk.saml2.idp.entity.metadados.idp.KeyDescriptor;
 import br.com.sbk.saml2.idp.entity.metadados.idp.KeyInfo;
 import br.com.sbk.saml2.idp.entity.metadados.idp.SingleSignOnService;
 import br.com.sbk.saml2.idp.entity.metadados.idp.X509Data;
-import io.swagger.annotations.Api;
 
 @RestController
-@Api(value = "SamlIdp")
 public class RESTController {
 /*
 	@Autowired

@@ -21,21 +21,12 @@ import br.com.sbk.saml2.idp.entity.metadados.sp.EntityDescriptor;
 import br.com.sbk.saml2.idp.utils.NamespaceFilterXMLReader;
 
 @Service
-public class DatabaseService {
+public class MetadataService {
 
-	public static final Logger logger = LoggerFactory.getLogger(DatabaseService.class);
-/*
-	@Autowired
-	private TbIntsoaSpConfigRepository TbIntsoaSpConfigRepository;
-
-	public TbIntsoaSpConfig recuperarEntityId(final String entityId) {
-		final TbIntsoaSpConfig TbIntsoaSpConfigResult = this.TbIntsoaSpConfigRepository.findByEntityId(entityId);
-		return TbIntsoaSpConfigResult;
-	}
-*/
+	public static final Logger logger = LoggerFactory.getLogger(MetadataService.class);
 
 	public String recuperarCertificado(final String entityId) throws FileNotFoundException {
-		return recuperarEntityDescriptor(entityId).getSPSSODescriptor().getKeyDescriptor().get(0).getKeyInfo().getX509Data().getX509Certificate();
+		return this.recuperarEntityDescriptor(entityId).getSPSSODescriptor().getKeyDescriptor().get(0).getKeyInfo().getX509Data().getX509Certificate();
 	}
 
 	public EntityDescriptor recuperarEntityDescriptor(final String entityId) throws FileNotFoundException {

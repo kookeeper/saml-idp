@@ -47,7 +47,7 @@ import org.xml.sax.SAXException;
 import br.com.sbk.saml2.idp.dto.SAMLAttribute;
 import br.com.sbk.saml2.idp.dto.SAMLPrincipal;
 import br.com.sbk.saml2.idp.entity.metadados.sp.EntityDescriptor;
-import br.com.sbk.saml2.idp.service.DatabaseService;
+import br.com.sbk.saml2.idp.service.MetadataService;
 import br.com.sbk.saml2.idp.service.SAMLMessageService;
 import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 
@@ -58,7 +58,7 @@ public class SsoController {
 	private SAMLMessageService samlMessage;
 
 	@Autowired
-	private DatabaseService database;
+	private MetadataService database;
 
 	@Value("${idp.error.message}")
 	private String idpErrorMessage;

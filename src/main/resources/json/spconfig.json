@@ -1,8 +1,0 @@
-{
-	"ENTITYID": "String",
-	"SPURL": "String",
-	"SPATTRIBUTES": "String",
-	"SPCERTIFICATE": "String",
-	"SPERRO": "String",
-	"SPREDIRECT": "String"
-}

@@ -114,32 +114,6 @@
 			<artifactId>jersey-client</artifactId>
 		</dependency>
 
-		<!-- Utils -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-		<!-- swagger2 -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>28.1-jre</version>
-		</dependency>
-		<!-- swagger UI -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.retry</groupId>
-			<artifactId>spring-retry</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -197,32 +171,6 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.jsonschema2pojo</groupId>
-				<artifactId>jsonschema2pojo-maven-plugin</artifactId>
-
-				<configuration>
-					<outputDirectory>src/main/java</outputDirectory>
-					<useBigDecimals>true</useBigDecimals>
-					<initializeCollections>false</initializeCollections>
-				</configuration>
-				<executions>
-					<execution>
-						<id>spconfig</id>
-						<configuration>
-							<sourceDirectory>src/main/resources/json/spconfig.json</sourceDirectory>
-							<targetPackage>br.com.gpa.saml.model.spconfig</targetPackage>
-							<serializable>true</serializable>
-							<sourceType>json</sourceType>
-						</configuration>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 
