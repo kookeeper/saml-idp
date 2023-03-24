@@ -49,7 +49,6 @@ import br.com.sbk.saml2.idp.dto.SAMLPrincipal;
 import br.com.sbk.saml2.idp.entity.metadados.sp.EntityDescriptor;
 import br.com.sbk.saml2.idp.service.MetadataService;
 import br.com.sbk.saml2.idp.service.SAMLMessageService;
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 
 @Controller
 public class SsoController {
@@ -62,7 +61,13 @@ public class SsoController {
 
 	@Value("${idp.error.message}")
 	private String idpErrorMessage;
-
+	
+	@Value("${login.page.url}")
+	private String loginUrl;
+	
+	@Value("${error.page.url}")
+	private String errorUrl;
+	
 	String relayState;
 	String sigAlg;
 	String signature;
@@ -90,7 +95,7 @@ public class SsoController {
 					"Service Provider " + context.getInboundMessageIssuer() + " nao encontrado na base de dados.");
 			model.addAttribute("mensagem",
 					"Service Provider " + context.getInboundMessageIssuer() + " nao encontrado na base de dados.");
-			return new ModelAndView("redirect:http://localhost:8081/saml-idp-html/erro.jsp", model);
+			return new ModelAndView("redirect:" + errorUrl, model);
 		} else {
 			SsoController.logger.debug("Abrindo pagina de login para service provider: {}",
 					context.getInboundMessageIssuer());
@@ -122,10 +127,10 @@ public class SsoController {
 			} catch (final Exception e) {
 				SsoController.logger.error("Erro ao tentar validar certificado do SP: " + e.getLocalizedMessage(), e);
 				model.addAttribute("mensagem", e.getLocalizedMessage());
-				return new ModelAndView("redirect:http://localhost:8081/saml-idp-html/erro.jsp", model);
+				return new ModelAndView("redirect:" + errorUrl, model);
 			}
 
-			return new ModelAndView("redirect:http://localhost:8081/saml-idp-html/index.jsp", model);
+			return new ModelAndView("redirect:" + loginUrl, model);
 		}
 	}
 
@@ -178,7 +183,7 @@ public class SsoController {
 				return new ModelAndView(assertionConsumerServiceURL, model);
 			}
 		} else {
-			return new ModelAndView("redirect:http://localhost:8081/saml-idp-html/erro.jsp", model);
+			return new ModelAndView("redirect:" + errorUrl, model);
 		}
 	}
 
@@ -207,7 +212,7 @@ public class SsoController {
 
 		model.addAttribute("msgErro", this.idpErrorMessage);
 		model.addAttribute("mensagem", request.getParameter("msgErro"));
-		return new ModelAndView("redirect:http://localhost:8081/saml-idp-html/erro.jsp", model);
+		return new ModelAndView("redirect:" + errorUrl, model);
 	}
 
 	private void validarCertificado(final String spCertificate) throws CertificateException, NoSuchAlgorithmException,

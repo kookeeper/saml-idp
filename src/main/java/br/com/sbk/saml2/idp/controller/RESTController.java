@@ -27,44 +27,11 @@ import br.com.sbk.saml2.idp.entity.metadados.idp.X509Data;
 
 @RestController
 public class RESTController {
-/*
-	@Autowired
-	private TbIntsoaSpConfigRepository rbIntsoaSpConfigRepository;
-*/
+
 	@Autowired
 	private IdpConfiguration idp;
 	
 	public static final Logger logger = LoggerFactory.getLogger(RESTController.class);
-/*
-	@RequestMapping(value = "/salvarConfiguracaoSP", method = RequestMethod.POST)
-	public String salvarConfiguracaoSP(@RequestBody Spconfig sp) {
-		String retorno;
-
-		try {
-			logger.info("Iniciando salvamento dos dados do parceiro na tabela TB_INTSOA_SPCONFIG >>> entityId: "
-					+ sp.getEntityid());
-			TbIntsoaSpConfig tbIntsoaSpConfig = new TbIntsoaSpConfig();
-
-			tbIntsoaSpConfig.setEntityId(sp.getEntityid());
-			tbIntsoaSpConfig.setSpUrl(sp.getSpurl());
-			tbIntsoaSpConfig.setSpAttributes(sp.getSpattributes());
-			tbIntsoaSpConfig.setSpCertificate(sp.getSpcertificate());
-			tbIntsoaSpConfig.setSpErro(sp.getSperro());
-			tbIntsoaSpConfig.setSpRedirect(sp.getSpredirect());
-
-			rbIntsoaSpConfigRepository.save(tbIntsoaSpConfig);
-
-			logger.info("Registro salvo com sucesso na tabela TB_INTSOA_SPCONFIG >>> entityId: " + sp.getEntityid());
-
-			retorno = "Salvo com sucesso.";
-		} catch (Exception e) {
-			retorno = "Erro ao salvar.";
-			logger.error("Erro ao salvar na tabela TB_INTSOA_SPCONFIG >>> " + e.getMessage());
-		}
-
-		return retorno;
-	}
-*/
 	
 	@GetMapping("/metadados")
 	public ResponseEntity<byte[]> metadados() throws Exception {	
