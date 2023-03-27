@@ -12,6 +12,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.saml2.core.NameIDType;
 import org.opensaml.saml2.core.StatusCode;
+import org.opensaml.saml2.core.impl.AuthnRequestImpl;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
@@ -68,11 +70,6 @@ public class SsoController {
 	@Value("${error.page.url}")
 	private String errorUrl;
 	
-	String relayState;
-	String sigAlg;
-	String signature;
-	String keyInfo;
-
 	public static final Logger logger = LoggerFactory.getLogger(SsoController.class);
 
 	@GetMapping("/login")
@@ -108,22 +105,23 @@ public class SsoController {
 				model.addAttribute("requestID", auth.getID());
 				model.addAttribute("requestIssuer", auth.getIssuer().getValue());
 			}
-			this.relayState = context.getRelayState();
-			this.sigAlg = request.getParameter("SigAlg");
-			this.signature = request.getParameter("Signature");
+			final String relayState = context.getRelayState();
+			final String sigAlg = request.getParameter("SigAlg");
+			final String signature = request.getParameter("Signature");
 
 			model.addAttribute("samlRequest", request.getParameter("SAMLRequest"));
 			model.addAttribute("postRequest", "false");
 			model.addAttribute("entityId", context.getInboundMessageIssuer());
-			model.addAttribute("relayState", this.relayState);
-			model.addAttribute("sigAlg", this.sigAlg);
-			model.addAttribute("signature", this.signature);
+			model.addAttribute("relayState", Base64.getEncoder().encode(relayState.getBytes()));
+			model.addAttribute("sigAlg", sigAlg);
+			model.addAttribute("signature", signature);
 			model.addAttribute("mensagem", request.getParameter("mensagem"));
+			model.addAttribute("assertionConsumerServiceURL", Base64.getEncoder().encode(((AuthnRequestImpl)context.getInboundSAMLMessage()).getAssertionConsumerServiceURL().getBytes()));
 
 			try {
 				// Valida Certificado do SP
 				validarCertificado(metadados.getSPSSODescriptor().getKeyDescriptor().get(0).getKeyInfo().getX509Data()
-						.getX509Certificate());
+						.getX509Certificate(), signature);
 			} catch (final Exception e) {
 				SsoController.logger.error("Erro ao tentar validar certificado do SP: " + e.getLocalizedMessage(), e);
 				model.addAttribute("mensagem", e.getLocalizedMessage());
@@ -142,14 +140,13 @@ public class SsoController {
 		final EntityDescriptor metadados = this.database.recuperarEntityDescriptor(entityId);
 
 		if (metadados != null) {
+			final String relayState = new String(Base64.getDecoder().decode(request.getParameter("relayState")));
 			final String authRequestID = request.getParameter("requestID");
 			SsoController.logger.info("Atribuindo valores ao authRequest: " + authRequestID + " - para o usuario ["
 					+ request.getParameter("j_username") + "]");
 			final String authRequestIssuer = request.getParameter("requestIssuer");
 			final String username = request.getParameter("username");
-			String assertionConsumerServiceURL = metadados.getSPSSODescriptor().getAssertionConsumerService()
-					.getLocation();
-			assertionConsumerServiceURL = "https://pessoal51.my.salesforce.com?sc=0LE8Y0000011n2c";
+			final String assertionConsumerServiceURL = new String(Base64.getDecoder().decode(request.getParameter("assertionConsumerServiceURL")));
 
 			final List<SAMLAttribute> attributes = new ArrayList<>();
 
@@ -172,7 +169,7 @@ public class SsoController {
 								.filter(attr -> "urn:oasis:names:tc:SAML:1.1:nameid-format".equals(attr.getName()))
 								.findFirst().map(attr -> attr.getValue()).orElse(NameIDType.UNSPECIFIED),
 						attributes, authRequestIssuer, authRequestID, assertionConsumerServiceURL,
-						request.getParameter("relayState"));
+						relayState);
 
 				this.samlMessage.sendAuthnResponse(principal, response, statusCode);
 
@@ -215,7 +212,7 @@ public class SsoController {
 		return new ModelAndView("redirect:" + errorUrl, model);
 	}
 
-	private void validarCertificado(final String spCertificate) throws CertificateException, NoSuchAlgorithmException,
+	private void validarCertificado(final String spCertificate, final String signature) throws CertificateException, NoSuchAlgorithmException,
 			InvalidKeyException, java.security.SignatureException {
 		final byte[] keyBinary = DatatypeConverter.parseBase64Binary(spCertificate);
 		final CertificateFactory certFactory = CertificateFactory.getInstance("X509");
@@ -223,7 +220,7 @@ public class SsoController {
 
 		Signature sign = Signature.getInstance("SHA256withRSA");
 		sign.initVerify(cert);
-		sign.verify(DatatypeConverter.parseBase64Binary(this.signature));
+		sign.verify(DatatypeConverter.parseBase64Binary(signature));
 
 		final BasicX509Credential credential = new BasicX509Credential();
 		credential.setEntityCertificate((X509Certificate) cert);
