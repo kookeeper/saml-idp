@@ -8,13 +8,22 @@ import static br.com.sbk.saml2.idp.execution.SAMLBuilder.signAssertion;
 import static java.util.Arrays.asList;
 import static org.opensaml.xml.Configuration.getValidatorSuite;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
@@ -42,6 +51,7 @@ import org.opensaml.xml.security.CriteriaSet;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.credential.Credential;
 import org.opensaml.xml.security.criteria.EntityIDCriteria;
+import org.opensaml.xml.security.x509.BasicX509Credential;
 import org.opensaml.xml.signature.SignatureException;
 import org.opensaml.xml.validation.ValidationException;
 import org.opensaml.xml.validation.ValidatorSuite;
@@ -88,8 +98,7 @@ public class SAMLMessageService {
 	}
 
 	public SAMLMessageContext extractSAMLMessageContext(HttpServletRequest request, HttpServletResponse response,
-			boolean postRequest)
-			throws ValidationException, SecurityException, MessageDecodingException, MetadataProviderException {
+			boolean postRequest) throws MetadataProviderException, MessageDecodingException, SecurityException, ValidationException {
 		SAMLMessageContext messageContext = new SAMLMessageContext();
 
 		proxiedSAMLContextProviderLB.populateGenericContext(request, response, messageContext);
@@ -166,11 +175,13 @@ public class SAMLMessageService {
 			messageContext.setOutboundMessageIssuer(entityId);
 			messageContext.setRelayState(principal.getRelayState());
 
-			log.info("OutboundMessageIssuer enviado ao client: " + authResponse.getInResponseTo() + " para o usuario [" + principal.getNameID() + "]");
-			
+			log.info("OutboundMessageIssuer enviado ao client: " + authResponse.getInResponseTo() + " para o usuario ["
+					+ principal.getNameID() + "]");
+
 			encoder.encode(messageContext);
 		} catch (MarshallingException | SignatureException | MessageEncodingException e) {
-			throw new IllegalArgumentException("Erro ao tentar devolver response autenticado: " + e.getLocalizedMessage(), e);
+			throw new IllegalArgumentException(
+					"Erro ao tentar devolver response autenticado: " + e.getLocalizedMessage(), e);
 		}
 
 	}
@@ -181,6 +192,20 @@ public class SAMLMessageService {
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void validarCertificado(final String spCertificate, final String signature) throws CertificateException,
+			NoSuchAlgorithmException, InvalidKeyException, java.security.SignatureException {
+		final byte[] keyBinary = DatatypeConverter.parseBase64Binary(spCertificate);
+		final CertificateFactory certFactory = CertificateFactory.getInstance("X509");
+		final Certificate cert = certFactory.generateCertificate(new ByteArrayInputStream(keyBinary));
+
+		Signature sign = Signature.getInstance("SHA256withRSA");
+		sign.initVerify(cert);
+		sign.verify(DatatypeConverter.parseBase64Binary(signature));
+
+		final BasicX509Credential credential = new BasicX509Credential();
+		credential.setEntityCertificate((X509Certificate) cert);
 	}
 
 }
