@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,7 +18,7 @@ import javax.xml.transform.sax.SAXSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -35,16 +37,27 @@ import br.com.sbk.saml2.idp.utils.NamespaceFilterXMLReader;
 public class MetadataService {
 
 	public static final Logger logger = LoggerFactory.getLogger(MetadataService.class);
+	
+	private final IdpConfiguration idp;
+	private final String metadadosFolder;
+	private final Map<String, EntityDescriptor> entityDescriptors = new HashMap<>();
 
-	@Autowired
-	private IdpConfiguration idp;
+	public MetadataService(final IdpConfiguration idp, @Value("${metadados.folder}") final String metadadosFolder) throws FileNotFoundException, SAXException, ParserConfigurationException, JAXBException {
+		this.idp = idp;
+		this.metadadosFolder = metadadosFolder;
+		loadEntityDescriptors();
+	}
 
 	public String recuperarCertificado(final String entityId) throws FileNotFoundException {
 		return this.recuperarEntityDescriptor(entityId).getSPSSODescriptor().getKeyDescriptor().get(0).getKeyInfo()
 				.getX509Data().getX509Certificate();
 	}
+	
+	public EntityDescriptor recuperarEntityDescriptor(final String entityId) {
+		return entityDescriptors.get(entityId);
+	}
 
-	public EntityDescriptor recuperarEntityDescriptor(final String entityId) throws FileNotFoundException {
+	public EntityDescriptor recuperarEntityDescriptor_(final String entityId) throws FileNotFoundException {
 		try {
 			XMLReader reader = new NamespaceFilterXMLReader();
 			InputSource is = new InputSource(
@@ -103,5 +116,26 @@ public class MetadataService {
 		jaxbMarshaller.marshal(entityDescriptor, sw);
 
 		return sw.toString().getBytes();
+	}
+	
+	private void loadEntityDescriptors() throws FileNotFoundException, SAXException, ParserConfigurationException, JAXBException {
+		if (!new File(this.metadadosFolder).isDirectory()) {
+			throw new IllegalArgumentException("Pasta configurada não existe: '" + this.metadadosFolder + "'.");
+		}
+		
+		for (File file : new File(this.metadadosFolder).listFiles()) {
+			final EntityDescriptor e = readFile(file);
+			logger.info("EntityId encontrado: " + e.getEntityID());
+			entityDescriptors.put(e.getEntityID(), e);
+		}
+	}
+	
+	private EntityDescriptor readFile(final File file) throws SAXException, ParserConfigurationException, FileNotFoundException, JAXBException {
+		XMLReader reader = new NamespaceFilterXMLReader();
+		InputSource is = new InputSource(new FileReader(file));
+		SAXSource ss = new SAXSource(reader, is);
+		JAXBContext jaxbContext = JAXBContext.newInstance(EntityDescriptor.class);
+		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+		return (EntityDescriptor) unmarshaller.unmarshal(ss);
 	}
 }

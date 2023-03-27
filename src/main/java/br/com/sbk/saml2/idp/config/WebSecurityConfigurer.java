@@ -36,12 +36,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.saml.key.JKSKeyManager;
 import org.springframework.security.saml.util.VelocityFactory;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import br.com.sbk.saml2.idp.service.SAMLMessageService;
 
 @Configuration
-public class WebSecurityConfigurer extends WebMvcConfigurerAdapter {
+public class WebSecurityConfigurer implements WebMvcConfigurer {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Bean

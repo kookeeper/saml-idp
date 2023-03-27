@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.saml2.core.NameIDType;
 import org.opensaml.saml2.core.StatusCode;
-import org.opensaml.saml2.core.impl.AuthnRequestImpl;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.security.SecurityException;
@@ -62,7 +60,7 @@ public class SsoController {
 		final org.springframework.security.saml.context.SAMLMessageContext context = this.samlMessage
 				.extractSAMLMessageContext(request, response, false);
 
-		SsoController.logger.debug("Pesquisando service provider {} na base de dados.",
+		SsoController.logger.info("Pesquisando service provider {} na base de dados.",
 				context.getInboundMessageIssuer());
 
 		final EntityDescriptor metadados = this.database.recuperarEntityDescriptor(context.getInboundMessageIssuer());
@@ -71,30 +69,29 @@ public class SsoController {
 					"Não foi possível obter os dados do entityId '" + context.getInboundMessageIssuer() + "'.");
 		}
 
-		SsoController.logger.debug("Abrindo pagina de login para service provider: {}",
-				context.getInboundMessageIssuer());
-
 		if (context.getInboundSAMLMessage() instanceof AuthnRequest) {
 			// Envia informacoes do contexto e SAMLRequest para atributos da pagina
 			final AuthnRequest auth = (AuthnRequest) context.getInboundSAMLMessage();
 			SsoController.logger.info("Atribuindo authRequest: " + auth.getID() + " para o issuer ["
 					+ context.getInboundMessageIssuer() + "]");
 			model.addAttribute("requestID", auth.getID());
-			model.addAttribute("requestIssuer", auth.getIssuer().getValue());
+			model.addAttribute("requestIssuer",
+					Base64.getEncoder().encodeToString(auth.getIssuer().getValue().getBytes()));
+			model.addAttribute("sigAlg",
+					Base64.getEncoder().encodeToString(auth.getAssertionConsumerServiceURL().getBytes())/* sigAlg */);
+			model.addAttribute("assertionConsumerServiceURL",
+					Base64.getEncoder().encodeToString(auth.getAssertionConsumerServiceURL().getBytes()));
 		}
-		final String relayState = context.getRelayState();
-		final String sigAlg = request.getParameter("SigAlg");
+
 		final String signature = request.getParameter("Signature");
 
-		model.addAttribute("samlRequest", request.getParameter("SAMLRequest"));
 		model.addAttribute("postRequest", "false");
-		model.addAttribute("entityId", context.getInboundMessageIssuer());
-		model.addAttribute("relayState", Base64.getEncoder().encode(relayState.getBytes()));
-		model.addAttribute("sigAlg", sigAlg);
+		model.addAttribute("entityId",
+				Base64.getEncoder().encodeToString(context.getInboundMessageIssuer().getBytes()));
+		model.addAttribute("relayState", Base64.getEncoder().encodeToString(context.getRelayState().getBytes()));
+		model.addAttribute("samlRequest", request.getParameter("SAMLRequest"));
 		model.addAttribute("signature", signature);
 		model.addAttribute("mensagem", request.getParameter("mensagem"));
-		model.addAttribute("assertionConsumerServiceURL", Base64.getEncoder().encode(
-				((AuthnRequestImpl) context.getInboundSAMLMessage()).getAssertionConsumerServiceURL().getBytes()));
 
 		// Valida Certificado do SP
 		samlMessage.validarCertificado(metadados.getSPSSODescriptor().getKeyDescriptor().get(0).getKeyInfo()
@@ -108,7 +105,7 @@ public class SsoController {
 	private void doSSO(final HttpServletRequest request, final HttpServletResponse response, final ModelMap model)
 			throws FileNotFoundException {
 
-		final String entityId = request.getParameter("entityId");
+		final String entityId = new String(Base64.getDecoder().decode(request.getParameter("entityId")));
 		if (StringUtils.isEmpty(entityId)) {
 			throw new IllegalArgumentException("Não foi possível obter o parametro 'entityId'.");
 		}
@@ -120,32 +117,21 @@ public class SsoController {
 
 		final String relayState = new String(Base64.getDecoder().decode(request.getParameter("relayState")));
 		final String authRequestID = request.getParameter("requestID");
-		SsoController.logger.info("Atribuindo valores ao authRequest: " + authRequestID + " - para o usuario ["
-				+ request.getParameter("j_username") + "]");
-		final String authRequestIssuer = request.getParameter("requestIssuer");
+		final String authRequestIssuer = new String(Base64.getDecoder().decode(request.getParameter("requestIssuer")));
 		final String username = request.getParameter("username");
 		final String assertionConsumerServiceURL = new String(
 				Base64.getDecoder().decode(request.getParameter("assertionConsumerServiceURL")));
 
-		final List<SAMLAttribute> attributes = new ArrayList<>();
+		final List<SAMLAttribute> attributes = Collections
+				.singletonList(new SAMLAttribute("autenticado", Collections.singletonList("true")));
 
-		attributes.add(new SAMLAttribute("autenticado", Collections.singletonList("true")));
-
-		String statusCode = "";
-		SAMLPrincipal principal = null;
-		if (attributes.isEmpty()) {
-			statusCode = StatusCode.AUTHN_FAILED_URI;
-		} else {
-			statusCode = StatusCode.SUCCESS_URI;
-		}
-
-		SsoController.logger.info("Atribuindo requestID a tag principal: " + authRequestID + " - para o usuario ["
-				+ request.getParameter("j_username") + "]");
-		principal = new SAMLPrincipal(username,
+		final SAMLPrincipal principal = new SAMLPrincipal(username,
 				attributes.stream().filter(attr -> "urn:oasis:names:tc:SAML:1.1:nameid-format".equals(attr.getName()))
 						.findFirst().map(attr -> attr.getValue()).orElse(NameIDType.UNSPECIFIED),
 				attributes, authRequestIssuer, authRequestID, assertionConsumerServiceURL, relayState);
+		
+		logger.info("Usuario {} logado para EntityId {}.", username, entityId);
 
-		this.samlMessage.sendAuthnResponse(principal, response, statusCode);
+		this.samlMessage.sendAuthnResponse(principal, response, StatusCode.SUCCESS_URI);
 	}
 }
